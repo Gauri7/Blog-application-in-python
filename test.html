@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+       #buttons{
+	position:relative;
+	display: inline-block;
+	float: right;
+	}
+	h1{
+	position:relative;
+	text-align:center;
+	font-family:Palatino;
+	color:#557cd1
+}
+#link{
+color: white;
+font-weight: 900;
+}
+#list{
+background-color:#a7c3f2;
+}
+form.form-horizontal:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+    </style>
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div  id="test">
+        <div class="well">
+        <h1>Welcome</h1>
+        <form class="form-horizontal" method="post">
+            <div id="buttons" >
+                <input type="button" name="Signup" class="btn btn-primary" value="signup"
+                        onclick="location.href = 'signup'"/>
+                <input type="button" name="Login" class="btn btn-primary" value="login"
+                        onclick="location.href = 'login'"/>
+            </div>
+            </form>
+             </div>
+
+
+      <div>{% for b in blog %}
+            <div id = "list"class="list-group-item list-group-item-info" style="position:relative"><br><strong><a id="link" href="blogsubmission?title={{b.title}}&m={{b.millis}}">
+                {{ b.title }}</a></strong>
+                <br><br><small><b>~{{ b.username }}</b></small>&nbsp;&nbsp;
+                <span class="glyphicon glyphicon-time" > {{b.created}}</span></div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+     #buttons{
+	position:relative;
+	margin-left:1000px;
+	}
+	h1{
+	position:relative;
+	text-align:center;
+	font-family:Palatino;
+	color:#557cd1
+}
+#link{
+color: white;
+font-weight: 900;
+}
+#list{
+background-color:#a7c3f2;
+}
+    </style>
+    <title></title>
+
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to your profile</h1>
+    <h3>Hi,</h3>
+<div>{{user}}</div></h1>
+<form method="post">
+    <div id="buttons">
+            <input  type="button" name="Logout" value="logout"  class="btn btn-primary btn-block" onclick="location.href = 'logout'"/>
+
+    <input  type="button" name="Create" value="create"  class="btn btn-primary btn-block" onclick="location.href = 'blogcreation'"/>
+    </div>
+</form>
+      <div>{% for b in blog %}
+            <div id = "list"class="list-group-item list-group-item-info" style="position:relative"><br><strong><a id="link" href="blogsubmission?title={{b.title}}&m={{b.millis}}">
+                {{ b.title }}</a></strong>
+                <br><br><small><b>~{{ b.username }}</b></small>&nbsp;&nbsp;
+                <span class="glyphicon glyphicon-time" > {{b.created}}</span></div>
+            {% endfor %}
+        </div>
+</div>
+</body>
+</html>

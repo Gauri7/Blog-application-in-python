@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <title></title>
+</head>
+<body>
+   <div class="container">
+<h1>Create your Blog !!!</h1>
+       <form class="form-horizontal" method="post">
+            <div class="form-group">
+<label  for="name">Title:</label><br>
+<div class="col-xs-4">
+            <input type="text" name="title" id="title" class="form-control" placeholder="Enter your title" value="{{title}}"><br>
+</div>
+            </div>
+           <div class="form-group">
+<label  for="name">Content:</label><br>
+               <textarea rows="20" cols="30" id="content" name="content" class="form-control">{{content}}</textarea>
+           </div> <div>{{error}}</div>
+           <input type="submit" class="btn btn-primary btn-block"  value="submit" >
+       </form>
+   </div>
+</body>
+</html>

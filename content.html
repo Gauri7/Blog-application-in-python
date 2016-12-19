@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/test.js"></script>
+
+    <title>Title</title>
+    <style>
+        h1{
+	position:relative;
+	text-align:center;
+	font-family:Palatino;
+	color:#557cd1
+}
+#disp{
+position:relative;
+	 margin: 100px;
+	 padding: 20px 0;
+	 background-image: url('/css/background-2.jpg');
+	 background-size: cover;
+}
+input{
+width:100px;
+}
+    </style>
+</head>
+    <body>
+    <div class="container">
+
+
+<div>
+    <div id ="disp">
+    <div class="panel-body"><br><br><h1><b>{{ title }}</b></h1><br><br>~
+        <span><b>{{ username }}</b></span> <br> <span class="glyphicon glyphicon-time">{{ created }}</span>
+                 <br>
+                 <br>
+                 {{ content }}
+    <br></div>
+         <div class="pager"> <a href="/">
+          Home
+    </a>
+
+    {% if   username   ==  cookie  %}
+          <input  type="button" id = "editing" name="{{title}}&{{content}}" class="btn btn-primary" value="Edit" onclick="location.href = 'edit?m={{millis}}'"/>
+   <input  type="button" name="Delete" class="btn btn-primary" value="delete"
+           onclick="location.href = 'delete?title={{title}}&content={{content}}'"/>
+    {% endif %}
+         </div>
+         </div>
+    </div>
+    </div>
+    </body></html>
