@@ -34,13 +34,13 @@ background-color:#a7c3f2;
 <div>{{user}}</div></h1>
 <form method="post">
     <div id="buttons">
-            <input  type="button" name="Logout" value="logout"  class="btn btn-primary btn-block" onclick="location.href = 'logout'"/>
+            <input  type="button" name="Logout" value="logout"  class="btn btn-primary btn-block" onclick="location.href = '/logout'"/>
 
     <input  type="button" name="Create" value="create"  class="btn btn-primary btn-block" onclick="location.href = 'blogcreation'"/>
     </div>
 </form>
       <div>{% for b in blog %}
-            <div id = "list"class="list-group-item list-group-item-info" style="position:relative"><br><strong><a id="link" href="blogsubmission?title={{b.title}}&m={{b.millis}}">
+           <div id = "list"class="list-group-item list-group-item-info" style="position:relative"><br><strong><a id="link" href="blogs/{{b.key.id}}">
                 {{ b.title }}</a></strong>
                 <br><br><small><b>~{{ b.username }}</b></small>&nbsp;&nbsp;
                 <span class="glyphicon glyphicon-time" > {{b.created}}</span></div>

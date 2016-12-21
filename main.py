@@ -25,6 +25,8 @@ import time
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 
+
+
 path = os.path.join(os.path.dirname(__file__), 'test.html')
 signuppath = os.path.join(os.path.dirname(__file__), 'signup.html')
 loginpath = os.path.join(os.path.dirname(__file__), 'login.html')
@@ -56,7 +58,6 @@ class BlogDetails(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     millis = ndb.IntegerProperty()
 
-
 class Signup(Handler):
     def get(self):
         try:
@@ -64,8 +65,7 @@ class Signup(Handler):
             cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get();
             uname = cookie_user.username
             if cookie_user:
-                template_values = {"user": uname}
-                self.write(template.render(welcomepath, template_values))
+                self.redirect("/")
 
             else:
                 template_values = {"error": ""}
@@ -100,7 +100,7 @@ class Signup(Handler):
                                "username": userName,
                                }
             self.write(template.render(welcomepath, template_values))
-
+            self.redirect("/")
 
 class Login(Handler):
     def get(self):
@@ -110,8 +110,8 @@ class Login(Handler):
             cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get();
             uname = cookie_user.username
             if cookie_user:
-                template_values = {"user": uname}
-                self.write(template.render(welcomepath, template_values))
+
+                self.redirect("/")
                 #self.response.out.write("")
 
             else:
@@ -213,10 +213,10 @@ class Create(Handler):
         self.write(template.render(welcomepath, template_values))
 
 
-class BlogSubmission(Handler):
-    def get(self):
-        millis = int(self.request.get("m"))
-        blogc = BlogDetails.query(BlogDetails.millis == millis).get()
+class Blogs(Handler):
+    def get(self, id):
+
+        blogc = ndb.Key(BlogDetails,int(id)).get()
         title = blogc.title
         content = blogc.content
         name = blogc.username
@@ -226,16 +226,17 @@ class BlogSubmission(Handler):
 
             cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get();
             uname = cookie_user.username
-
             template_values = {
-                "content":content,
-                "title":title,
-                "username":name,
-                "cookie":uname,
-                "created":created,
-                "millis":millis,
-                }
+                "content": content,
+                "title": title,
+                "username": name,
+                "created": created,
+                "cookie": uname,
+                "id":id
+            }
             self.write(template.render(contentpath, template_values))
+
+
         except:
             content = blogc.content
             name = blogc.username
@@ -249,14 +250,13 @@ class BlogSubmission(Handler):
 
 
 class Edit(Handler):
-    key = 0
 
-    def get(self):
+
+    def get(self,id):
         #title = self.request.get("title")
-        millis = int(self.request.get("m"))
         #content = self.request.get("content")
-        blogs = BlogDetails.query().filter(BlogDetails.millis == millis).get()
-        Edit.key = blogs.key.id()
+        blogs = ndb.Key(BlogDetails,int(id)).get()
+
         title = blogs.title
         content = blogs.content
         template_values = {
@@ -265,14 +265,14 @@ class Edit(Handler):
         }
         self.write(template.render(blogpath, template_values))
 
-    def post(self):
+    def post(self,id):
         title = self.request.get("title")
         content = self.request.get("content")
         cookie_val = self.request.cookies.get("user")
         cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get()
         uname = cookie_user.username
         #keys = int(Edit.key)
-        blogt = ndb.Key(BlogDetails,Edit.key).get()
+        blogt = ndb.Key(BlogDetails,int(id)).get()
         #blogq = BlogDetails.get_by_id(str(Edit.key))
         blogt.title = title
         blogt.content = content
@@ -282,28 +282,32 @@ class Edit(Handler):
                            "blog": blog,
                            "username": uname,
                            }
-        self.write(template.render(welcomepath, template_values))
+        self.redirect("/")
 
 
 class Delete(Handler):
-    def get(self):
-        title = self.request.get("title")
-        content = self.request.get("content")
+    def get(self,id):
+
 
         cookie_val = self.request.cookies.get("user")
 
         cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get()
         uname = cookie_user.username
-        blogs = BlogDetails.query().filter(BlogDetails.title == title).get()
+        blogs =  ndb.Key(BlogDetails, int(id)).get()
+        name = blogs.username
+        if cookie_val and uname==name:
 
-        blogs.key.delete()
-        blog = BlogDetails.query().order(-ndb.DateTimeProperty("created"))
-        template_values = {"user": uname,
+            ndb.Key(BlogDetails, int(id)).delete()
+
+            blog = BlogDetails.query().order(-ndb.DateTimeProperty("created"))
+            template_values = {"user": uname,
                            "blog": blog,
                            "username": uname,
                            }
-        self.write(template.render(welcomepath, template_values))
+            self.write(template.render(welcomepath, template_values))
 
+        else :
+            self.write("You cant modify or delete other blogs")
 
 
 class Test(Handler):
@@ -316,6 +320,8 @@ class Test(Handler):
             cookie_user = SecureUser.query().filter(SecureUser.sessionid == cookie_val).get();
             uname = cookie_user.username
             if cookie_user:
+
+
                 blog = BlogDetails.query().order(-ndb.DateTimeProperty("created"))
                 template_values = {"user": uname,
                                "blog": blog
@@ -338,7 +344,8 @@ app = webapp2.WSGIApplication([('/', Test),
                                ('/login', Login),
                                ('/logout', Logout),
                                ('/blogcreation', Create),
-                               ('/blogsubmission', BlogSubmission),
-                               ('/edit', Edit),
-                               ('/delete', Delete)],
+                               ('/blogs/(\d+)', Blogs),
+                               #('/blog/<blog_id>', Blog)
+                               ('/edit/(\d+)', Edit),
+                               ('/delete/(\d+)', Delete)],
                               debug=True)
